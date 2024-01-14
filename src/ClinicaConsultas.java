@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ClinicaConsultas {
 
@@ -107,6 +109,11 @@ public class ClinicaConsultas {
         System.out.print("Digite o telefone do paciente (ex: 123456789): ");
         String telefone = scanner.nextLine();
 
+        if (!isTelefoneValido(telefone)) {
+            System.out.println("Telefone inválido. Certifique-se de que contém exatamente 9 dígitos numéricos.");
+            return;
+        }
+
         // Verifica se o paciente já está cadastrado
         for (Paciente paciente : pacientesCadastrados) {
             if (paciente.telefone.equals(telefone)) {
@@ -203,6 +210,14 @@ public class ClinicaConsultas {
 
         Consulta consultaCancelada = consultasAgendadas.remove(numeroConsulta - 1);
         System.out.println("Consulta cancelada com sucesso para o paciente " + consultaCancelada.paciente.nome);
+    }
+
+    static boolean isTelefoneValido(String telefone) {
+        String regex = "\\d{9}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(telefone.replace(" ",""));
+
+        return matcher.matches();
     }
 
     static boolean isDataValida(String data, String hora) {
